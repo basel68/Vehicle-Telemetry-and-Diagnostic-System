@@ -1,0 +1,68 @@
+cmake_minimum_required(VERSION 3.10)  
+
+project(VehicleTelemetryAndDiagnostics)  
+
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+
+include_directories(Inc
+Inc/Diagnostics
+Inc/Observer
+Inc/Sensor
+Inc/Logger
+Inc/ACC
+)
+
+
+add_library(Diagnostics STATIC
+    Src/Diagnostics/Diagnostics.cpp
+    Inc/Diagnostics/Diagnostics.hpp
+)
+
+
+add_library(Sensors STATIC
+    Src/Sensor/Battery.cpp
+    Src/Sensor/RadarSensor.cpp
+    Src/Sensor/Sensor.cpp
+    Src/Sensor/SpeedSensor.cpp
+    Src/Sensor/TemperatureSensor.cpp
+    Inc/Sensor/Battery.hpp
+    Inc/Sensor/RadarSensor.hpp
+    Inc/Sensor/Sensor.hpp
+    Inc/Sensor/SpeedSensor.hpp
+    Inc/Sensor/TemperatureSensor.hpp
+)
+
+add_library(ACC STATIC
+    Src/ACC/AdaptiveCruiseControl.cpp
+    Inc/ACC/AdaptiveCruiseControl.hpp
+
+)
+
+
+add_library(Logger STATIC
+    Src/Logger/Logger.cpp
+    Inc/Logger/Logger.hpp
+)
+
+add_library(Observer
+Inc/Observer/Observer.hpp
+Inc/Observer/Subject.hpp
+Src/Observer/Subject.cpp
+
+)
+add_executable(Vehicle
+    Src/Vehicle.cpp
+)
+
+
+target_link_libraries(Vehicle 
+    Diagnostics
+    Sensors
+    ACC
+    Logger
+    Observer
+    
+)
