@@ -17,7 +17,7 @@ protected:
 
 public:
  
-    void attach(Observer* observer);
+    void attach(Observer*);
 
     /**
      * @brief Notify all attached observers of a change.

@@ -1,0 +1,18 @@
+digraph "AdaptiveCruiseControl"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="AdaptiveCruiseControl",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Manages the adaptive cruise control feature of the vehicle."];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="Observer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classObserver.html",tooltip="Interface for observer classes."];
+  Node3 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" speed" ,fontname="Helvetica"];
+  Node3 [label="SpeedSensor",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classSpeedSensor.html",tooltip="Represents a speed sensor in the vehicle, extending the Sensor class."];
+  Node4 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="Sensor",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classSensor.html",tooltip="Abstract base class representing a generic sensor."];
+  Node5 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="Subject",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classSubject.html",tooltip="Base class for subjects that notify observers of changes."];
+  Node6 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" radar" ,fontname="Helvetica"];
+  Node6 [label="RadarSensor",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classRadarSensor.html",tooltip="Represents a radar sensor in the vehicle, extending the Sensor class."];
+  Node4 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

@@ -1,0 +1,185 @@
+#pragma once
+#include "Sensor.hpp"
+#include <cstdlib>
+class Battery:public Sensor
+{
+private:
+    int temp_;
+public:
+    
+    Battery(int val,std::string type,int temp);
+    Battery(const Battery& Instance);
+    Battery(Battery&& Instance);
+    Battery& operator=(const Battery& Instance);
+    Battery& operator=(Battery&& Instance);
+    int get_value() const override;
+    void update_value(int new_value) override;
+    bool is_charged();
+    int get_temperature();
+    std::string get_type() override;
+    bool is_functional() override;
+    bool in_optimal_range() override;
+    ~Battery();
+};
+
+
+
+#pragma once
+#include "Sensor.hpp"
+class SpeedSensor:public Sensor
+{
+
+public:
+    SpeedSensor(int val,std::string type);
+    SpeedSensor(const SpeedSensor& Instance);
+    SpeedSensor(SpeedSensor&& Instance);
+    SpeedSensor& operator=(const SpeedSensor& Instance);
+    SpeedSensor& operator=(SpeedSensor&& Instance);
+    int get_value() const override;
+    int set_value(int new_value);
+    void update_value(int new_value) override;
+    std::string get_type() override;
+    bool is_functional() override;
+    bool in_optimal_range() override;
+    virtual ~SpeedSensor();
+   
+};
+
+
+
+#pragma once
+#include "Sensor.hpp"
+class TemperatureSensor:public Sensor
+{
+
+public:
+    TemperatureSensor(int val,std::string type);
+    TemperatureSensor(const TemperatureSensor& Instance);
+    TemperatureSensor(TemperatureSensor&& Instance);
+    TemperatureSensor& operator=(const TemperatureSensor& Instance);
+    TemperatureSensor& operator=(TemperatureSensor&& Instance);
+    int get_value() const override;
+    void update_value(int new_value) override;
+    std::string get_type() override;
+    bool is_functional() override;
+    bool in_optimal_range() override;
+    virtual ~TemperatureSensor();
+   
+};
+
+
+
+enum class LogLevel{
+ERROR,
+WARNING,
+INFO
+};
+
+#pragma once 
+#include <iostream>
+#include <string>
+#include <chrono>
+#include <ctime>
+#include "LogLevel.hpp"
+class Logger
+{
+private:
+   Logger();
+public:
+    static Logger& get_instance();
+    void log(std::string message,LogLevel level);
+    ~Logger();
+};
+
+
+
+#pragma once
+#include <string>
+#include "Logger.hpp"
+class Observer
+{
+
+public:
+    Observer(){
+
+    }
+    virtual void update(const std::string& message)=0;
+    virtual void update(const std::string& message,LogLevel level)=0;
+
+    virtual ~Observer(){
+
+    }
+};
+
+
+#pragma once
+
+#include "Observer.hpp"
+#include <vector>
+#include <algorithm>
+#include <memory>
+
+class Subject {
+protected:
+    std::vector<Observer*> observers;
+
+public:
+    virtual ~Subject() {}
+    void attach(Observer* observer) {
+        observers.push_back(observer);
+    }
+
+   
+
+    void notifyObservers(const std::string& message) {
+        for (Observer* observer : observers) {
+            observer->update(message);
+        }
+    }
+     void notifyObservers(const std::string& message,LogLevel level) {
+        for (Observer* observer : observers) {
+            observer->update(message,level);
+        }
+    }
+};
+
+
+#pragma once
+
+#include <iostream>
+#include "Sensor.hpp"
+#include <map>
+#include "AdaptiveCruiseControl.hpp"
+
+
+class Diagnostics : public Observer{
+private:
+    Diagnostics();
+    static std::map<std::string,std::string> curr_status;
+
+public:
+    static Diagnostics& getInstance();
+    void update(const std::string& message) override;
+    void update(const std::string& message,LogLevel level) override;
+    static void status();
+    Diagnostics(const Diagnostics&) = delete;
+    Diagnostics& operator=(const Diagnostics&) = delete;
+};
+
+
+
+
+
+#include "RadarSensor.hpp"
+#include "SpeedSensor.hpp"
+#include "Observer.hpp"
+class AdaptiveCruiseControl:public Observer {
+private:
+SpeedSensor speed;
+RadarSensor radar;
+public:
+    AdaptiveCruiseControl(SpeedSensor,RadarSensor);
+     void update(const std::string& message);
+     void update(const std::string& message,LogLevel level);
+     void adjustSpeed(); 
+};
